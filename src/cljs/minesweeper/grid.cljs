@@ -131,9 +131,9 @@
   ([field]
    (= 0 (get field :value))))
 
-(defn- to-reveal [x y grid]
-  "Alle leeren Felder in der direkten Umgebung, falls das Feld selbst auch leer ist.
-  Ansonsten wird nur das Feld selbst zurückgegeben"
+(defn to-reveal [x y grid]
+  "If the field at this position is empty, it returns all positions that should be revealed too.
+  Otherwise, only the position itself is returned in a vector"
   (let [start [[x y]]]
     (if (zero-field? x y grid)
       (loop [context {:all-zeroes    start
@@ -146,7 +146,7 @@
             all-zeroes
             (recur (let [zeroes (->> (in-grid next-border grid)
                                      (filter (fn [[x y]] (zero-field? x y grid)))
-                                     (filter (fn [point] (one-neighbour? point current-coords))))]
+                                     (filter (fn [point] (one-neighbour? point zeroes-before))))]
                      {:all-zeroes    (concat all-zeroes zeroes)
                       :zeroes-before zeroes})
                    next-border))))
