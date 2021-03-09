@@ -1,8 +1,9 @@
 (ns minesweeper.views
   (:require
    [re-frame.core :as rf]
+   [cljs.pprint :refer [pprint]]
    [minesweeper.subs :as subs]
-   [minesweeper.grid :as grid]
+   [minesweeper.grid :as g]
    [minesweeper.events :as evt]
    ))
 
@@ -11,12 +12,13 @@
         visible (:visible field)]
     [:button.fw-bold
      {:disabled visible
-      :on-click #(rf/dispatch [::evt/show-field [x y]])
-      :class    (str "grid-item value" value
-                     (when visible
-                       " visible")
-                     (when (and visible (grid/bomb? field))
-                       " fas fa-bomb"))}
+      :on-click (fn [e] (if (.-shiftKey e)
+                          (rf/dispatch [::evt/place-flag [x y]])
+                          (rf/dispatch [::evt/show-field [x y]])))
+      :class    (str "grid-item "
+                     (when visible (str " visible value" value))
+                     (when (and visible (g/bomb? field)) " fas fa-bomb")
+                     (when (and (not visible) (g/flagged? field)) " fas fa-flag"))}
      (when (and visible (> value 0))
        (str value))
      ]))
@@ -62,6 +64,7 @@
       (into [:div.grid]
             (for [y (range grid-size)
                   x (range grid-size)]
-              (grid-item x y)))]]
+              (grid-item x y)))]
+     [:p "Hold 'shift'-key to place a flag!"]]
     ))
 

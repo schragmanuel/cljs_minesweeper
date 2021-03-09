@@ -13,6 +13,9 @@
 .grid-item.visible.fa-bomb {
     color:red;
 }
+.grid-item.fa-flag {
+    color:red;
+}
 .grid-item.value1 {
     color: green;
 }

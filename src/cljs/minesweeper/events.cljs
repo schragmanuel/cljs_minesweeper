@@ -21,6 +21,11 @@
     (state/show-field db x y)))
 
 (re-frame/reg-event-db
+  ::place-flag
+  (fn [db [_ [x y]]]
+    (state/place-flag db x y)))
+
+(re-frame/reg-event-db
   ::show-all
   (fn [db _]
     (state/show-all db)))

@@ -1,7 +1,7 @@
 (ns minesweeper.grid)
 
 ;; grid creation
-(defrecord Field [value visible])
+(defrecord Field [value visible flagged])
 
 (defn- xlength [grid]
   (count (first grid)))
@@ -21,13 +21,11 @@
 (defn bomb? [field]
   (= bomb-value (get field :value)))
 
-(defn- const-field
-  "Feld erstellen"
-  [bomb?]
-  (->Field (if bomb? -1 0) false))
+(defn flagged? [field]
+  (get field :flagged))
 
 (defn- grid-row [nbr]
-  (->> (repeatedly nbr #(->Field 0 false))
+  (->> (repeatedly nbr #(->Field 0 false false))
        (vec)))
 
 (defn- random-xy [nbr]
@@ -99,7 +97,7 @@
     (reduce
       (fn [g [nx ny]] (->> (bomb-nearby (get-field nx ny g))
                            (put-field nx ny g)))
-      (put-field x y grid (->Field bomb-value false))
+      (put-field x y grid (->Field bomb-value false false))
       (grid-neighbours x y grid))))
 
 (defn- create-empty-grid [grid-size]
@@ -112,8 +110,11 @@
 
 
 ;; playing
-(defn- make-visible [field]
+(defn make-visible [field]
   (assoc field :visible true))
+
+(defn flag-field [field]
+  (assoc field :flagged true))
 
 (defn- visible? [field]
   (get field :visible))

@@ -40,6 +40,13 @@
                           new-grid)
                   :finished finished?)))))
 
+(defn place-flag [db x y]
+  (let [grid (:grid db)]
+    (->> (g/get-field x y grid)
+         (g/flag-field)
+         (g/put-field x y grid)
+         (assoc db :grid))))
+
 (defn replay [db]
   (-> (assoc db :grid (create-grid (:grid-size db)))
        (assoc :lost false
