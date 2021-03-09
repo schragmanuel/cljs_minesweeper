@@ -1,0 +1,31 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 40px);
+  grid-template-rows: repeat(10, 40px);
+}
+.grid-item {
+    border: 1px solid black;
+    background: gray;
+}
+.grid-item.visible {
+    background: lightgreen;
+}
+.grid-item.visible.fa-bomb {
+    color:red;
+}
+.grid-item.value1 {
+    color: green;
+}
+.grid-item.value2 {
+    color: blue;
+}
+.grid-item.value3 {
+    color: orange;
+}
+.grid-item.value4,
+.grid-item.value5,
+.grid-item.value6,
+.grid-item.value7,
+.grid-item.value8 {
+    color: red;
+}
